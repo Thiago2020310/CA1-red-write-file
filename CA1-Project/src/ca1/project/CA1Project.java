@@ -26,7 +26,10 @@ public class CA1Project {
 //            while(fileReader.hasNext()){
 //                System.out.println(fileReader.nextLine());
 //            }
-            
+            customer1.setName(fileReader.nextLine());
+            System.out.println(customer1.getName());
+            System.out.println(customer1.getFirstName());
+            //System.out.println(customer1.getSecondName());
         }
         catch(FileNotFoundException e){
             System.out.println(e.getMessage());

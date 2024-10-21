@@ -20,6 +20,7 @@ public class Customers {
     private int theClass;
     private int year;
     
+    
     /*
     Setters to set the values for the variables. The setters will be public, which mens it can be accessed anywhere, void which means that this will not return any value.
     */
@@ -30,9 +31,20 @@ public class Customers {
         try{
             //the "this.variable" here mans that we are looking for the variable on this class.
             this.name = input;
-            String[] names = name.split(" ");
-            firstName = names[0];
+            
+            if(name.contains(" ")){
+                String[] names = name.split(" ");
+            if(names[0].matches("^[a-zA-Z]+$")){
+                firstName = names[0];
+            }else{
+                System.out.println("The first name should contain only letters");
+            }
+            
             secondName = names[1];
+            
+            }else{
+                System.out.println("There must be an space between the first and second name.");
+            }
             
         }catch(Exception e){
             //The Exception is global, and creates the "e" object, we are using the getMessage() method, which returns a synthax string related to the error identified.
@@ -41,6 +53,10 @@ public class Customers {
        
     }
     
+    /**
+     * 
+     * @param input receive a double value
+     */
     public void setPrice(double input){
         try{
             this.price = input;
@@ -49,6 +65,10 @@ public class Customers {
         }
     }
     
+    /**
+     * 
+     * @param input receives the class input (digit)
+     */
     public void setClass(int input){
         try{
             this.theClass = input;
@@ -57,6 +77,10 @@ public class Customers {
         }
     }
     
+    /**
+     * 
+     * @param input receives the integer year input
+     */
     public void setYear(int input){
         try{
             this.year = input;
