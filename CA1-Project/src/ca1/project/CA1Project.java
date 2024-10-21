@@ -4,6 +4,7 @@
  */
 package ca1.project;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Scanner;
 
@@ -22,12 +23,12 @@ public class CA1Project {
         
         try{
             Scanner fileReader = new Scanner(new FileReader("/Users/tgsouzadev/Desktop/PROGRAMMING AND MATHS FUNDAMENTALS/Java Applications/CA1-read-write-file/customers.txt"));
-            customer1.setName(fileReader.nextLine());
-            System.out.println(customer1.getName());
-            customer1.setName(fileReader.nextLine());
-            System.out.println(customer1.getName());
+//            while(fileReader.hasNext()){
+//                System.out.println(fileReader.nextLine());
+//            }
             
-        }catch(Exception e){
+        }
+        catch(FileNotFoundException e){
             System.out.println(e.getMessage());
         }
         
