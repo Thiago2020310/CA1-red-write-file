@@ -18,18 +18,19 @@ public class CA1Project {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Customers customer1 = new Customers();
-        
+        Customers[] customersArr;
         
         try{
             Scanner fileReader = new Scanner(new FileReader("/Users/tgsouzadev/Desktop/PROGRAMMING AND MATHS FUNDAMENTALS/Java Applications/CA1-read-write-file/customers.txt"));
-//            while(fileReader.hasNext()){
-//                System.out.println(fileReader.nextLine());
-//            }
-            customer1.setName(fileReader.nextLine());
-            System.out.println(customer1.getName());
-            System.out.println(customer1.getFirstName());
-            //System.out.println(customer1.getSecondName());
+            for(int i =0; i<=4; i++){
+                while(fileReader.hasNext()){ 
+                    System.out.println(fileReader.nextLine());
+                }
+            }
+//            customer1.setName(fileReader.nextLine());
+//            System.out.println(customer1.getName());
+//            System.out.println(customer1.getFirstName());
+//            System.out.println(customer1.getSecondName());
         }
         catch(FileNotFoundException e){
             System.out.println(e.getMessage());

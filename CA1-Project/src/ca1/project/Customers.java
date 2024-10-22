@@ -40,8 +40,12 @@ public class Customers {
                 System.out.println("The first name should contain only letters");
             }
             
-            secondName = names[1];
-            
+            //Using Regex to check if the second name contains only letters and numbers
+            if(!names[1].contains("[^\\\\p{L}\\\\d\\\\s_]")){
+                System.out.println("The second name only accepts letters and numbers");
+            }else{
+                secondName = names[1];
+            }
             }else{
                 System.out.println("There must be an space between the first and second name.");
             }
