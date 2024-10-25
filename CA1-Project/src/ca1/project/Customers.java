@@ -22,6 +22,9 @@ public class Customers {
     private int theClass;
     private int currentYear;
     private int year;
+    private double discount;
+    private double finalPrice;
+    
     Calendar calendar = Calendar.getInstance();
     /**
      * Constructor that takes the name, price, class and year from the file and creates an object with the set values.
@@ -33,6 +36,8 @@ public class Customers {
         setPrice(price);
         setClass(theClass);
         setYear(year);
+        double discount;
+        double finalPrice;
     }
     
     private Customers(){
@@ -50,7 +55,7 @@ public class Customers {
         try{
             //If statement to check if the input is null or if theres no space between the names.
             if(input == null || !input.contains(" ")) {
-                //Using trow illegal argument exception for error handling this will stop the function if an error is found and throw an error message to the user - https://rollbar.com/blog/how-to-throw-illegalargumentexception-in-java/
+                //Using trow illegal argument exception for error handling within a try and catch this will stop the function if an error is found and throw an error message to the user - https://rollbar.com/blog/how-to-throw-illegalargumentexception-in-java/
                 throw new IllegalArgumentException("Invalid name. There must be a space between the first and second name.");
             }
             String[] names = input.trim().split(" ");
@@ -133,6 +138,10 @@ public class Customers {
             this.year = 0;
         }
     }
+    
+    public void setDiscount(){
+        calcDisc(this.theClass, this.year);
+    }
     /**
     *
     * @return The name of the customer.
@@ -164,6 +173,10 @@ public class Customers {
         return price;
     }
     
+    public double getFP(){
+        return finalPrice;
+    }
+    
     /**
      *
      * @return The class of the customer
@@ -180,10 +193,70 @@ public class Customers {
         return year;
     }
    
-    
+    public double getDisc(){
+        return discount;
+    }
     /*
     Methods to define what the class can do.
     */
+    /**
+     * 
+     * @param theClass - Method receives a Integer ref the customer class
+     * @param theYear - Method receives a integer with the year of the last purchase
+     * @return the discount based on the two parameters
+     */
+    public double calcDisc(int theClass, int theYear){
+        try{
+            switch(theClass){
+                case 1:
+                    if(theYear == this.currentYear){
+                        this.discount = this.price * 0.30;
+                        this.finalPrice = price - discount;
+                        System.out.println("The customer gets a 30% discount.");
+                    }else if((theYear +5) > this.currentYear){
+                        this.discount = this.price * 0.20;
+                        this.finalPrice = price - discount;
+                        System.out.println("The customer gets a 20% discount.");
+                    }else if((theYear +5) < this.currentYear){
+                        this.discount = this.price * 0.10;
+                        this.finalPrice = price - discount;
+                        System.out.println("The customer gets a 10% discount.");
+                    }
+                    break;
+                case 2:
+                    if(theYear == this.currentYear){
+                        this.discount = this.price * 0.15;
+                        this.finalPrice = price - discount;
+                        System.out.println("The customer gets a 15% discount.");
+                    }else if((theYear +5) > this.currentYear){
+                        this.discount = this.price * 0.13;
+                        this.finalPrice = price - discount;
+                        System.out.println("The customer gets a 13% discount.");
+                    }else if((theYear +5) < this.currentYear){
+                        this.discount = this.price * 0.05;
+                        this.finalPrice = price - discount;
+                        System.out.println("The customer gets a 5% discount.");
+                    }
+                    break;
+                case 3:
+                    if(theYear == this.currentYear){
+                        this.discount = this.price * 0.3;
+                        this.finalPrice = price - discount;
+                        System.out.println("The customer gets a 3% discount.");
+                    }else if((theYear +5) > this.currentYear){
+                        this.discount = 0;
+                        this.finalPrice = price;
+                        System.out.println("No discounts available at the moment");
+                    }
+                    break;
+                default:
+                    System.out.println("The customer doesn't fit the requisites for discounts at the moment.");
+            }
+        }catch(Exception e){
+            System.out.println(e.getLocalizedMessage());
+        }
+        return discount;  
+    }
     
     
 }  

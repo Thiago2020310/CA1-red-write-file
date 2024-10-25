@@ -32,11 +32,14 @@ public class CA1Project {
                 theClass = fileReader.readLine();
                 year = fileReader.readLine();
                 Customers newCus = new Customers(fullName, price, theClass, year);
+                newCus.setDiscount();
+                System.out.println(newCus.getDisc());
+                System.out.println(newCus.getFP());
                 System.out.println("Customer information: \n"
-                        + "Name: " + newCus.getSecondName()+ "\n"
+                        + "Name: " + newCus.getFirstName()+ " " + newCus.getSecondName() + "\n"
                         + "Price: " + newCus.getPrice() + "\n"
                         + "Customer class: " + newCus.getTheClass() + "\n"
-                        + "Year: " + newCus.getYear()+ "\n");
+                        + "Last Purchase(y): " + newCus.getYear()+ "\n");
             }
         }
         catch(NumberFormatException | IOException e){
