@@ -5,6 +5,7 @@
 package ca1.project;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.util.Calendar;
 
 /**
  *
@@ -20,8 +21,10 @@ public class Customers {
     private String secondName;
     private double price;
     private int theClass;
+    private int currentYear;
+    private int yearValid;
     private int year;
-    
+    Calendar calendar = Calendar.getInstance();
     /**
      * Constructor that takes the name, price, class and year from the file and creates an object with the set values.
      */
@@ -117,7 +120,12 @@ public class Customers {
      */
     public void setYear(String input){
         try{
+            this.currentYear = calendar.get(Calendar.YEAR);
             this.year = Integer.parseInt(input);
+            if(year <= 1900 || year > currentYear){
+                throw new IllegalArgumentException("The year should be higher than 1900 and lower than the current year.");
+            }
+            this.year = year;
         }catch(Exception e){
             System.out.println(e.getLocalizedMessage());
             this.year = 0;

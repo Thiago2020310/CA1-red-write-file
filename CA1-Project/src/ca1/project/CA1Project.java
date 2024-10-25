@@ -28,7 +28,7 @@ public class CA1Project {
         
         
         try{
-            BufferedReader fileReader = new BufferedReader(new FileReader("/Users/new-thiago/Documents/GitHub/CA1-red-write-file/customers.txt"));
+            BufferedReader fileReader = new BufferedReader(new FileReader("C:\\Users\\User\\Documents\\GitHub\\CA1-red-write-file\\customers.txt"));
             String line;
             //The variable for line is declared before the loop because the while condition will read the first line of the file, therefore we need to have already initialized so that it can store the name right after the condition for the loop.
             while((line = fileReader.readLine()) != null){
