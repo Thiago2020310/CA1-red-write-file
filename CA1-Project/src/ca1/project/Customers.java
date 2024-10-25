@@ -16,13 +16,11 @@ public class Customers {
     Instance variables to store name, price, class and year of the costumers. Set to private so it can only be accessed with setters and getters.
     */
     private String name;
-    private String names[];
     private String firstName;
     private String secondName;
     private double price;
     private int theClass;
     private int currentYear;
-    private int yearValid;
     private int year;
     Calendar calendar = Calendar.getInstance();
     /**
@@ -96,7 +94,7 @@ public class Customers {
         try{
             this.price = Double.valueOf(input);
         }catch(Exception e){
-            System.out.println(e.getLocalizedMessage());
+            System.out.println("The price should be either a double value.");
             this.price = 0.0;
         }
     }
@@ -108,8 +106,12 @@ public class Customers {
     public void setClass(String input){
         try{
             this.theClass = Integer.parseInt(input);
+            if(theClass < 1 || theClass > 3){
+                this.theClass = 0;
+                throw new IllegalArgumentException("Invalid class. Customers class are defined 1,2 or 3.");
+            }
         }catch(Exception e){
-            System.out.println(e.getLocalizedMessage());
+            System.out.println("The class must be an Integer between 1 and 3");
             this.theClass = 0;
         }
     }
@@ -123,11 +125,11 @@ public class Customers {
             this.currentYear = calendar.get(Calendar.YEAR);
             this.year = Integer.parseInt(input);
             if(year <= 1900 || year > currentYear){
+                this.year =0;
                 throw new IllegalArgumentException("The year should be higher than 1900 and lower than the current year.");
-            }
-            this.year = year;
+            }                
         }catch(Exception e){
-            System.out.println(e.getLocalizedMessage());
+            System.out.println("The year must be an Integer between 1900 and the current year");
             this.year = 0;
         }
     }

@@ -5,10 +5,8 @@
 package ca1.project;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Scanner;
 
 /**
  *
@@ -18,14 +16,10 @@ public class CA1Project {
     
     /**
      * @param args the command line arguments
+     * @throws java.io.IOException
      */
     public static void main(String[] args) throws IOException {
         String fullName, price, theClass, year;
-        String firstName = " Not set ";
-        String secondName = " Not set ";
-        
-        String[] names = null;
-        
         
         try{
             BufferedReader fileReader = new BufferedReader(new FileReader("C:\\Users\\User\\Documents\\GitHub\\CA1-red-write-file\\customers.txt"));
@@ -43,17 +37,9 @@ public class CA1Project {
                         + "Price: " + newCus.getPrice() + "\n"
                         + "Customer class: " + newCus.getTheClass() + "\n"
                         + "Year: " + newCus.getYear()+ "\n");
-                
             }
-            
-//            customer1.setName(fileReader.nextLine());
-//            System.out.println(customer1.getName());
-//            System.out.println(customer1.getFirstName());
-//            System.out.println(customer1.getSecondName());
         }
-        catch(NumberFormatException e){
-            System.out.println("The number entered is invalid.");
-        }catch(IOException e){
+        catch(NumberFormatException | IOException e){
             System.out.println(e.getLocalizedMessage());
         }
         
