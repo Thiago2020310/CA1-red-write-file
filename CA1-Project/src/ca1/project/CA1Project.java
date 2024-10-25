@@ -20,23 +20,23 @@ public class CA1Project {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws IOException {
-        String fullName;
+        String fullName, price, theClass, year;
         String firstName = " Not set ";
         String secondName = " Not set ";
         
         String[] names = null;
-        double price;
-        int theClass, year;
         
         
         try{
-            BufferedReader fileReader = new BufferedReader(new FileReader("/Users/tgsouzadev/Desktop/PROGRAMMING AND MATHS FUNDAMENTALS/Java Applications/CA1-read-write-file/CA1-Project/customers.txt"));
+            BufferedReader fileReader = new BufferedReader(new FileReader("/Users/new-thiago/Documents/GitHub/CA1-red-write-file/customers.txt"));
             String line;
+            //The variable for line is declared before the loop because the while condition will read the first line of the file, therefore we need to have already initialized so that it can store the name right after the condition for the loop.
             while((line = fileReader.readLine()) != null){
+                //All the field will receive a String value and then validate within the class method setter, if the value received can be transformed into the right data type, it means that its valid. For example if the user inputs Price: "23.a" The validator will send a message saying that the input is invalid and set the value to 0
                 fullName = line;
-                price = Double.parseDouble(fileReader.readLine());
-                theClass = Integer.parseInt(fileReader.readLine());
-                year = Integer.parseInt(fileReader.readLine());
+                price = fileReader.readLine();
+                theClass = fileReader.readLine();
+                year = fileReader.readLine();
                 Customers newCus = new Customers(fullName, price, theClass, year);
                 System.out.println("Customer information: \n"
                         + "Name: " + newCus.getSecondName()+ "\n"
@@ -52,7 +52,7 @@ public class CA1Project {
 //            System.out.println(customer1.getSecondName());
         }
         catch(NumberFormatException e){
-            System.out.println("Please enter a valid integer.");
+            System.out.println("The number entered is invalid.");
         }catch(IOException e){
             System.out.println(e.getLocalizedMessage());
         }

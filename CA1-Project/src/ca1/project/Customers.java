@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package ca1.project;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 
 /**
@@ -24,7 +25,7 @@ public class Customers {
     /**
      * Constructor that takes the name, price, class and year from the file and creates an object with the set values.
      */
-    public Customers(String name, double price, int theClass, int year){
+    public Customers(String name, String price, String theClass, String year){
         //call the function setName using the name input sent from the file.
         //The this.nameOfTheVariable indicates that the constructor is looking for the variable on the class and setting a value.
         setName(name);
@@ -88,11 +89,12 @@ public class Customers {
      * 
      * @param input receive a double value
      */
-    public void setPrice(double input){
+    public void setPrice(String input){
         try{
-            this.price = input;
+            this.price = Double.valueOf(input);
         }catch(Exception e){
             System.out.println(e.getLocalizedMessage());
+            this.price = 0.0;
         }
     }
     
@@ -100,11 +102,12 @@ public class Customers {
      * 
      * @param input receives the class input (digit)
      */
-    public void setClass(int input){
+    public void setClass(String input){
         try{
-            this.theClass = input;
+            this.theClass = Integer.parseInt(input);
         }catch(Exception e){
             System.out.println(e.getLocalizedMessage());
+            this.theClass = 0;
         }
     }
     
@@ -112,11 +115,12 @@ public class Customers {
      * 
      * @param input receives the integer year input
      */
-    public void setYear(int input){
+    public void setYear(String input){
         try{
-            this.year = input;
+            this.year = Integer.parseInt(input);
         }catch(Exception e){
             System.out.println(e.getLocalizedMessage());
+            this.year = 0;
         }
     }
     /**
