@@ -24,6 +24,9 @@ public class Customers {
     private int year;
     private double discount;
     private double finalPrice;
+    String finalMessage;
+    String errorMessage;
+    boolean error = false;
     
     Calendar calendar = Calendar.getInstance();
     /**
@@ -36,8 +39,10 @@ public class Customers {
         setPrice(price);
         setClass(theClass);
         setYear(year);
-        double discount;
-        double finalPrice;
+        this.discount = discount;
+        this.finalPrice = finalPrice;
+        this.finalMessage = finalMessage;
+        this.error = error;
     }
     
     private Customers(){
@@ -56,11 +61,15 @@ public class Customers {
             //If statement to check if the input is null or if theres no space between the names.
             if(input == null || !input.contains(" ")) {
                 //Using trow illegal argument exception for error handling within a try and catch this will stop the function if an error is found and throw an error message to the user - https://rollbar.com/blog/how-to-throw-illegalargumentexception-in-java/
+                this.errorMessage = "Name - Space";
+                this.error = true;
                 throw new IllegalArgumentException("Invalid name. There must be a space between the first and second name.");
             }
             String[] names = input.trim().split(" ");
             //If statement to check if there are more than two names.
             if(names.length != 2) {
+                this.errorMessage = "Name - Two";
+                this.error = true;
                 throw new IllegalArgumentException("Please enter only first and last name.");
             }
             /*
@@ -69,6 +78,8 @@ public class Customers {
             if(names[0].matches("^[a-zA-Z]+$")) {
                 this.firstName = names[0];
             } else {
+                this.errorMessage = "First Name";
+                this.error = true;
                 throw new IllegalArgumentException("The first name must contain only letters.");
             }
             
@@ -78,6 +89,8 @@ public class Customers {
             if(names[1].matches("^[a-zA-Z0-9]+$")) {
                 this.secondName = names[1];
             } else {
+                this.errorMessage = "Second name";
+                this.error = true;
                 throw new IllegalArgumentException("The second name must contain only letters or numbers.");
             }    
             
@@ -99,7 +112,9 @@ public class Customers {
         try{
             this.price = Double.valueOf(input);
         }catch(Exception e){
-            System.out.println("The price should be either a double value.");
+            //System.out.println("The price should be a double value.");
+            this.errorMessage = "Price Value";
+            this.error = true;
             this.price = 0.0;
         }
     }
@@ -113,11 +128,15 @@ public class Customers {
             this.theClass = Integer.parseInt(input);
             if(theClass < 1 || theClass > 3){
                 this.theClass = 0;
+                this.error = true;
+                this.errorMessage = "Invalid Class";
                 throw new IllegalArgumentException("Invalid class. Customers class are defined 1,2 or 3.");
             }
         }catch(Exception e){
+            //fail safe error message.
             System.out.println("The class must be an Integer between 1 and 3");
             this.theClass = 0;
+            this.error = true;
         }
     }
     
@@ -131,16 +150,23 @@ public class Customers {
             this.year = Integer.parseInt(input);
             if(year <= 1900 || year > currentYear){
                 this.year =0;
+                this.errorMessage = "Year error";
+                this.error = true;
                 throw new IllegalArgumentException("The year should be higher than 1900 and lower than the current year.");
             }                
         }catch(Exception e){
             System.out.println("The year must be an Integer between 1900 and the current year");
             this.year = 0;
+            this.error = true;
         }
     }
     
     public void setDiscount(){
-        calcDisc(this.theClass, this.year);
+        try{
+            calcDisc(this.theClass, this.year);
+        }catch(Exception e){
+            System.out.println(e.getLocalizedMessage());
+        }
     }
     /**
     *
@@ -240,7 +266,7 @@ public class Customers {
                     break;
                 case 3:
                     if(theYear == this.currentYear){
-                        this.discount = this.price * 0.3;
+                        this.discount = this.price * 0.03;
                         this.finalPrice = price - discount;
                         System.out.println("The customer gets a 3% discount.");
                     }else if((theYear +5) > this.currentYear){
@@ -256,6 +282,18 @@ public class Customers {
             System.out.println(e.getLocalizedMessage());
         }
         return discount;  
+    }
+    
+    public void writeMessage(){
+        try{
+            
+        }catch(Exception e){
+            System.out.println(e.getLocalizedMessage());
+        }
+    }
+    
+    public String getMessage(){
+        return finalMessage;
     }
     
     
