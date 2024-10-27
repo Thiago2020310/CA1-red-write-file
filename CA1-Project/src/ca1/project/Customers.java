@@ -25,7 +25,9 @@ public class Customers {
     private int currentYear;
     private int year;
     private double discount;
+    private String discMessage;
     private double finalPrice;
+    private String finalMessage;
     private String error;
 
     Calendar calendar = Calendar.getInstance();
@@ -34,14 +36,14 @@ public class Customers {
      */
     public Customers(String name, String price, String theClass, String year){
         //call the function setName using the name input sent from the file.
-        //The this.nameOfTheVariable indicates that the constructor is looking for the variable on the class and setting a value.
+        //The this.nameOfTheVariable indicates that the constructor is looking for the variable on the class and setting a value. At the end I choose to call the methods inside the constructor as set methods, which would potentially not be recommended, but I wans't sure and it fitted my logic.
         setName(name);
         setPrice(price);
         setClass(theClass);
         setYear(year);
-        this.discount = discount;
-        this.finalPrice = finalPrice;
+        setDiscount();
         setError(error);
+        writeMessage();
     }
     
     private Customers(){
@@ -57,19 +59,17 @@ public class Customers {
     */
     public void setName(String input){
         try{
-            //set the error message to null initially. A fail safe in case the value from previous verifications are written.
-            error = null;
             //If statement to check if the input is null or if theres no space between the names.
             if(input == null || !input.contains(" ")) {
                 //Using trow illegal argument exception for error handling within a try and catch this will stop the function if an error is found and throw an error message to the user - https://rollbar.com/blog/how-to-throw-illegalargumentexception-in-java/
-                 error = "Invalid name. There must be a space between the first and second name.";
-                 throw new IllegalArgumentException(error);
+                 setError("Invalid name. There must be a space between the first and second name.");
+                 return;
             }
             String[] names = input.trim().split(" ");
             //If statement to check if there are more than two names.
             if(names.length != 2) {
-                error = "Invalid name. Please enter only first and last name.";
-                throw new IllegalArgumentException(error);
+                setError("Invalid name. Please enter only first and last name.");
+                return;
             }
             /*
             Validation of first name using Regex pattern to accept only letters on the first name.
@@ -77,8 +77,8 @@ public class Customers {
             if(names[0].matches("^[a-zA-Z]+$")) {
                 this.firstName = names[0];
             } else {
-                error = "First name invalid. The first name must contain only letters.";
-                throw new IllegalArgumentException(error);
+                setError("First name invalid. The first name must contain only letters.");
+                return;
             }
             
             /*
@@ -87,15 +87,15 @@ public class Customers {
             if(names[1].matches("^[a-zA-Z0-9]+$")) {
                 this.secondName = names[1];
             } else {
-                error = "The second name must contain only letters or numbers.";
-                throw new IllegalArgumentException(error);
-            }    
-            
+                setError("The second name must contain only letters or numbers.");
+                return;
+            }
             //holds full name
             this.name = input;
             
         }catch(Exception e){
             //Fail Safe.The Exception is global, and creates the "e" object, we are using the getMessage() method, which returns a synthax string related to the error identified.
+            setError("First and last name required. There must be an space between them. Only letters are accepted on first name and letters and/or numbers are accepted on last name.");
             System.out.println(e.getLocalizedMessage());
         }
        
@@ -107,10 +107,10 @@ public class Customers {
      */
     public void setPrice(String input){
         try{
-            error = null;
             this.price = Double.valueOf(input);
         }catch(Exception e){
-            //System.out.println("The price should be a double value.");
+            setError("The price should be a double value.");
+            System.out.println(this.error);
             this.price = 0.0;
         }
     }
@@ -123,8 +123,9 @@ public class Customers {
         try{
             this.theClass = Integer.parseInt(input);
             if(theClass < 1 || theClass > 3){
+                setError("Invalid class. Customers class are defined 1,2 or 3.");
                 this.theClass = 0;
-                throw new IllegalArgumentException("Invalid class. Customers class are defined 1,2 or 3.");
+                throw new IllegalArgumentException(this.error);
             }
         }catch(Exception e){
             //fail safe error message.
@@ -142,15 +143,17 @@ public class Customers {
             this.currentYear = calendar.get(Calendar.YEAR);
             this.year = Integer.parseInt(input);
             if(year <= 1900 || year > currentYear){
-                this.year =0;
-               throw new IllegalArgumentException("The year should be higher than 1900 and lower than the current year.");
+                setError("The year should be higher than 1900 and lower than the current year.");
+                this.year = 0;
+                throw new IllegalArgumentException(this.error);
             }                
         }catch(Exception e){
-            System.out.println("The year must be an Integer between 1900 and the current year");
+            System.out.println(e.getLocalizedMessage());
             this.year = 0;
         }
     }
     
+    //Call the function calcDic created that will do the mathematics behind the discount, and assisgn the value to the discount variable. This probably isn't necessary, since the only reason for the method is to call another method.
     public void setDiscount(){
         try{
             calcDisc(this.theClass, this.year);
@@ -159,9 +162,11 @@ public class Customers {
         }
     }
     
-    public void setError(String errorMessage){
+    
+    //Set the error message based on the error found during validation. This method will be used on the setters.
+    public void setError(String error){
         try{
-            this.error = errorMessage;
+            this.error = error;
         }catch(Exception e){
             
         }
@@ -198,11 +203,18 @@ public class Customers {
         return price;
     }
     
+    /**
+     * 
+     * @return The final price
+     */
     public double getFP(){
         return finalPrice;
     }
     
-    
+    /**
+     * 
+     * @return the error message
+     */
    public String getError(){
        return error;
    }
@@ -223,6 +235,7 @@ public class Customers {
         return year;
     }
    
+    //get the discount value.
     public double getDisc(){
         return discount;
     }
@@ -237,66 +250,110 @@ public class Customers {
      */
     public double calcDisc(int theClass, int theYear){
         try{
+            //Fail safe to reset the discount message before executes the code.
+            discMessage = null;
+            
+            /*
+            Switch statement based on the class variable.
+            Each case reflects the classes.
+            Inside the cases a if statement to do the logic behind the possible discounts.
+            The break will stop the conditions if one of the cases is accessed.
+            */
             switch(theClass){
                 case 1:
                     if(theYear == this.currentYear){
+                        discMessage = "The customer gets a 30% discount.";
                         this.discount = this.price * 0.30;
                         this.finalPrice = price - discount;
-                        System.out.println("The customer gets a 30% discount.");
+                        //System.out.println(discMessage);
                     }else if((theYear +5) > this.currentYear){
+                        discMessage = "The customer gets a 20% discount.";
                         this.discount = this.price * 0.20;
                         this.finalPrice = price - discount;
-                        System.out.println("The customer gets a 20% discount.");
+                        //System.out.println(discMessage);
                     }else if((theYear +5) < this.currentYear){
+                        discMessage = "The customer gets a 10% discount.";
                         this.discount = this.price * 0.10;
                         this.finalPrice = price - discount;
-                        System.out.println("The customer gets a 10% discount.");
+                        //System.out.println(discMessage);
                     }
                     break;
                 case 2:
                     if(theYear == this.currentYear){
+                        discMessage = "The customer gets a 15% discount.";
                         this.discount = this.price * 0.15;
                         this.finalPrice = price - discount;
-                        System.out.println("The customer gets a 15% discount.");
+                        //System.out.println(discMessage);
                     }else if((theYear +5) > this.currentYear){
+                        discMessage = "The customer gets a 13% discount.";
                         this.discount = this.price * 0.13;
                         this.finalPrice = price - discount;
-                        System.out.println("The customer gets a 13% discount.");
+                        //System.out.println(discMessage);
                     }else if((theYear +5) < this.currentYear){
+                        discMessage = "The customer gets a 5% discount.";
                         this.discount = this.price * 0.05;
                         this.finalPrice = price - discount;
-                        System.out.println("The customer gets a 5% discount.");
+                        //System.out.println(discMessage);
                     }
                     break;
                 case 3:
                     if(theYear == this.currentYear){
+                        discMessage = "The customer gets a 3% discount.";
                         this.discount = this.price * 0.03;
                         this.finalPrice = price - discount;
-                        System.out.println("The customer gets a 3% discount.");
+                        //System.out.println(discMessage);
                     }else if((theYear +5) > this.currentYear){
+                        discMessage = "No discounts available at the moment";
                         this.discount = 0;
                         this.finalPrice = price;
-                        System.out.println("No discounts available at the moment");
+                        //System.out.println(discMessage);
                     }
                     break;
                 default:
-                    System.out.println("The customer doesn't fit the requisites for discounts at the moment.");
+                    //The remaining possible values for the class are not applicable to a discount, therefore not calculated and the final price is given the same as initial price.
+                    discMessage = "The customer doesn't fit the requisites for discounts at the moment.";
+                    this.finalPrice = price;
+                    System.out.println(discMessage);
             }
         }catch(Exception e){
+            //Fail safe exception in case any other error is found.
             System.out.println(e.getLocalizedMessage());
         }
         return discount;  
     }
     
+    /**
+     * 
+     * Write message method to set the final message variable to hold the String to be written on the new file. 
+     * The if condition checks if any error was found on the process, if so the error is also written on the customer information.
+     */
     public void writeMessage(){
         try{
-            
+            if(this.error == null){
+                finalMessage = "Customer information: \n"
+                        +"Name:" + firstName +" " + secondName + "\n"
+                        + discMessage + "\n"
+                        +"Final Price: $" + finalPrice + "($"+discount+" discount)\n";
+            }else if (this.error != null){
+                finalMessage = "Customer information: \n"
+                        + this.error + "\n"
+                        +"Name:" + firstName +" " + secondName + "\n"
+                        + discMessage + "\n"
+                        +"Final Price: $" + finalPrice + "($"+discount+" discount)\n";
+            }
         }catch(Exception e){
             System.out.println(e.getLocalizedMessage());
         }
         
     }
     
+    /**
+     * 
+     * @return the message to be written to the customer.
+     */
+    public String getMesssage(){
+        return finalMessage;
+    }
     
     
     
