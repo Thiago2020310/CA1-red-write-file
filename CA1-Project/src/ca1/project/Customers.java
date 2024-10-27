@@ -26,6 +26,7 @@ public class Customers {
     private int year;
     private double discount;
     private double finalPrice;
+    private String error;
 
     Calendar calendar = Calendar.getInstance();
     /**
@@ -40,6 +41,7 @@ public class Customers {
         setYear(year);
         this.discount = discount;
         this.finalPrice = finalPrice;
+        setError(error);
     }
     
     private Customers(){
@@ -55,16 +57,19 @@ public class Customers {
     */
     public void setName(String input){
         try{
+            //set the error message to null initially. A fail safe in case the value from previous verifications are written.
+            error = null;
             //If statement to check if the input is null or if theres no space between the names.
             if(input == null || !input.contains(" ")) {
                 //Using trow illegal argument exception for error handling within a try and catch this will stop the function if an error is found and throw an error message to the user - https://rollbar.com/blog/how-to-throw-illegalargumentexception-in-java/
-                
-                throw new IllegalArgumentException("Invalid name. There must be a space between the first and second name.");
+                 error = "Invalid name. There must be a space between the first and second name.";
+                 throw new IllegalArgumentException(error);
             }
             String[] names = input.trim().split(" ");
             //If statement to check if there are more than two names.
             if(names.length != 2) {
-                throw new IllegalArgumentException("Please enter only first and last name.");
+                error = "Invalid name. Please enter only first and last name.";
+                throw new IllegalArgumentException(error);
             }
             /*
             Validation of first name using Regex pattern to accept only letters on the first name.
@@ -72,7 +77,8 @@ public class Customers {
             if(names[0].matches("^[a-zA-Z]+$")) {
                 this.firstName = names[0];
             } else {
-                throw new IllegalArgumentException("The first name must contain only letters.");
+                error = "First name invalid. The first name must contain only letters.";
+                throw new IllegalArgumentException(error);
             }
             
             /*
@@ -81,14 +87,15 @@ public class Customers {
             if(names[1].matches("^[a-zA-Z0-9]+$")) {
                 this.secondName = names[1];
             } else {
-                throw new IllegalArgumentException("The second name must contain only letters or numbers.");
+                error = "The second name must contain only letters or numbers.";
+                throw new IllegalArgumentException(error);
             }    
             
             //holds full name
             this.name = input;
             
         }catch(Exception e){
-            //The Exception is global, and creates the "e" object, we are using the getMessage() method, which returns a synthax string related to the error identified.
+            //Fail Safe.The Exception is global, and creates the "e" object, we are using the getMessage() method, which returns a synthax string related to the error identified.
             System.out.println(e.getLocalizedMessage());
         }
        
@@ -100,6 +107,7 @@ public class Customers {
      */
     public void setPrice(String input){
         try{
+            error = null;
             this.price = Double.valueOf(input);
         }catch(Exception e){
             //System.out.println("The price should be a double value.");
@@ -150,6 +158,15 @@ public class Customers {
             System.out.println(e.getLocalizedMessage());
         }
     }
+    
+    public void setError(String errorMessage){
+        try{
+            this.error = errorMessage;
+        }catch(Exception e){
+            
+        }
+    }
+    
     /**
     *
     * @return The name of the customer.
@@ -184,6 +201,11 @@ public class Customers {
     public double getFP(){
         return finalPrice;
     }
+    
+    
+   public String getError(){
+       return error;
+   }
     
     /**
      *

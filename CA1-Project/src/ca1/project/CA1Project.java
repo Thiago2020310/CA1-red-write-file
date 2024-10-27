@@ -36,14 +36,16 @@ public class CA1Project {
                 year = fileReader.readLine();
                 Customers newCus = new Customers(fullName, price, theClass, year);
                 newCus.setDiscount();
-                myWriter.write("Hello World!");
-                myWriter.close();
+                if(newCus.getError() != null){
+                    myWriter.write(newCus.getError());
+                }
                 System.out.println("Customer information: \n"
                         + "Name: " + newCus.getFirstName()+ " " + newCus.getSecondName() + "\n"
                         + "Price: " + newCus.getPrice() + "\n"
                         + "Customer class: " + newCus.getTheClass() + "\n"
                         + "Last Purchase(y): " + newCus.getYear()+ "\n");
             }
+            myWriter.close();
         }
         catch(NumberFormatException | IOException e){
             System.out.println(e.getLocalizedMessage());
