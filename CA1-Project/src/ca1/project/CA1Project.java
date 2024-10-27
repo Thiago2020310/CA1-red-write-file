@@ -5,7 +5,9 @@
 package ca1.project;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 /**
@@ -23,6 +25,7 @@ public class CA1Project {
         
         try{
             BufferedReader fileReader = new BufferedReader(new FileReader("C:\\Users\\User\\Documents\\GitHub\\CA1-red-write-file\\customers.txt"));
+            BufferedWriter myWriter = new BufferedWriter(new FileWriter("Output.txt",false));
             String line;
             //The variable for line is declared before the loop because the while condition will read the first line of the file, therefore we need to have already initialized so that it can store the name right after the condition for the loop.
             while((line = fileReader.readLine()) != null){
@@ -33,8 +36,8 @@ public class CA1Project {
                 year = fileReader.readLine();
                 Customers newCus = new Customers(fullName, price, theClass, year);
                 newCus.setDiscount();
-                System.out.println(newCus.getDisc());
-                System.out.println(newCus.getFP());
+                myWriter.write("Hello World!");
+                myWriter.close();
                 System.out.println("Customer information: \n"
                         + "Name: " + newCus.getFirstName()+ " " + newCus.getSecondName() + "\n"
                         + "Price: " + newCus.getPrice() + "\n"
